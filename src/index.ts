@@ -35,7 +35,8 @@ app.get('/webhooks', (request, response) => {
 })
 
 app.post('/webhooks', (request, response) => {
-	if (request.body) let { body } =  request
+	const { body } =  request
+
 
 	console.log(JSON.stringify(body, null, 2))
 
