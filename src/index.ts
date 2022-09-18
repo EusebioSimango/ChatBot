@@ -8,7 +8,7 @@ import 'dotenv/config'
 const PORT = process.env.PORT
 const token = process.env.TOKEN
 const myToken = process.env.MY_TOKEN
-
+console.log(token, myToken)
 
 const app = express()
 app.use(bodyParser.json())
