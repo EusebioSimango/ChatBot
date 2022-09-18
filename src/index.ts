@@ -1,9 +1,14 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import "dotenv/config"
+import axios from 'axios'
+import 'dotenv/config'
 
-var test = process.env.MY_TOKEN
-console.log(test)
+// var test = process.env.MY_TOKEN
+// console.log(test)
+const PORT = process.env.PORT
+const token = process.env.TOKEN
+const myToken = process.env.MY_TOKEN
+
 
 const app = express()
 app.use(bodyParser.json())
@@ -16,15 +21,16 @@ app.get('/webhooks', (request, response) => {
 	let mode = request.query["hub.mode"]
 	let challenge = request.query["hub.challenge"]
 	let token = request.query["hub.verify_token"]
-	const myToken = process.env.MY_TOKEN
 
 	if (mode && token) {
 		if(mode == "subscribe" && token == myToken) {
 			response.status(200).send(challenge)
 		} else {
-			response.status(403)
+			response.sendStatus(403)
 		}
 	}
+
+	return response.send("HelloWorld!")
 })
 
 app.post('/webhooks', (request, response) => {
@@ -42,12 +48,29 @@ app.post('/webhooks', (request, response) => {
 			const from = body.entry[0].changes[0].value.messages[0].from
 			const messageBody = body.entry[0].changes[0].value.messages[0].text.body
 
+			axios({
+				method: "POST",
+				url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+				data: {
+					messaging_product: "whatsapp",
+					to: from,
+					text: {
+						body: "Hi.. I'm ESimas Bot",
+					}
+				},
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
+			response.sendStatus(200)
+		} else {
+			response.sendStatus(404)
 		}
 	}
 })
 
 
-app.listen(3333, () => {
+app.listen(PORT, () => {
 	console.log(">_ Server started")
 })
