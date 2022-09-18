@@ -4,7 +4,7 @@ const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric
 
 
 
-const dateAndTime = (location: string) => {
+const dateAndTime = (location: string): string => {
 	axios({
 		method: "GET",
 		url: `http://worldtimeapi.org/api/timezone/${location}`
