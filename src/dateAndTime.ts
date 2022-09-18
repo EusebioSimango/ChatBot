@@ -17,7 +17,7 @@ const dateAndTime = (location: string): string => {
  		})
 }
 
-export const getTimeZone = (region) => {
+export const getTimeZone = (region: string): string => {
 	axios({
 		method: "GET",
 		url: "http://worldtimeapi.org/api/timezone"
