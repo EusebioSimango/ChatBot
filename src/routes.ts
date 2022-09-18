@@ -58,7 +58,7 @@ routes.post('/webhooks', (request, response) => {
 						messaging_product: "whatsapp",
 						to: from,
 						text: {
-							body: `${datetime.toString()}`,
+							body: `${datetime}`,
 						}
 					},
 					headers: {
