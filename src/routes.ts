@@ -65,24 +65,22 @@ routes.post('/webhooks', (request, response) => {
 						'Content-Type': 'application/json'
 					}
 				})
-
-				return response.sendStatus(200)
-			}
-
-			axios({
-				method: "POST",
-				url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
-				data: {
-					messaging_product: "whatsapp",
-					to: from,
-					text: {
-						body: "Hi.. I'm ESimas Bot",
+			} else {
+				axios({
+					method: "POST",
+					url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+					data: {
+						messaging_product: "whatsapp",
+						to: from,
+						text: {
+							body: "Hi.. I'm ESimas Bot",
+						}
+					},
+					headers: {
+						'Content-Type': 'application/json'
 					}
-				},
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
+				})
+			}
 
 			response.sendStatus(200)
 		} else {
