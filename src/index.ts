@@ -2,7 +2,6 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import "dotenv/config"
 
-// config({ path: __dirname+'/.env' });
 var test = process.env.MY_TOKEN
 console.log(test)
 
@@ -27,6 +26,27 @@ app.get('/webhooks', (request, response) => {
 		}
 	}
 })
+
+app.post('/webhooks', (request, response) => {
+	let { body } = request
+
+	console.log(JSON.stringify(body, null, 2))
+
+	if (body.object){
+		if (body.entry && 
+			body.entry[0].changes && 
+			body.entry[0].changes[0].value.messages &&
+			body.entry[0].changes[0].value.messages[0] 
+		){
+			const phoneNumberId = body.entry[0].changes[0].value.metadata.phone_number_id
+			const from = body.entry[0].changes[0].value.messages[0].from
+			const messageBody = body.entry[0].changes[0].value.messages[0].text.body
+
+
+		}
+	}
+})
+
 
 app.listen(3333, () => {
 	console.log(">_ Server started")
