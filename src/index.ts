@@ -8,7 +8,7 @@ import 'dotenv/config'
 const PORT = process.env.PORT
 const token = process.env.TOKEN
 const myToken = process.env.MY_TOKEN
-console.log(token, myToken)
+
 
 const app = express()
 app.use(bodyParser.json())
@@ -22,6 +22,8 @@ app.get('/webhooks', (request, response) => {
 	let challenge = request.query["hub.challenge"]
 	let token = request.query["hub.verify_token"]
 
+	console.log(mode, challenge, token)
+
 	if (mode && token) {
 		if(mode == "subscribe" && token == myToken) {
 			response.status(200).send(challenge)
@@ -30,7 +32,7 @@ app.get('/webhooks', (request, response) => {
 		}
 	}
 
-	return response.send("HelloWorld!")
+	return response.send("Hello World!")
 })
 
 app.post('/webhooks', (request, response) => {
