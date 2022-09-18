@@ -3,7 +3,6 @@ import axios from "axios";
 import { getTimeZone } from "./dateAndTime";
 
 const token = process.env.TOKEN;
-const myToken = process.env.MY_TOKEN;
 
 export const routes = Router(); // start routes
 
@@ -51,28 +50,10 @@ routes.get("/", (request, response) => {
   return response.status(200).send("Hello, World!");
 });
 
-routes.get("/webhooks", (request, response) => {
-  let mode = request.query["hub.mode"];
-  let challenge = request.query["hub.challenge"];
-  let token = request.query["hub.verify_token"];
-
-  console.log(mode, challenge, token);
-
-  if (mode && token) {
-    if (mode == "subscribe" && token == myToken) {
-      response.status(200).send(challenge);
-    } else {
-      response.sendStatus(403);
-    }
-  }
-
-  return response.send("Hello World!");
-});
-
 routes.post("/webhooks", (request, response) => {
   const body: RequestBody = request.body;
-	console.log(request)
-	
+  console.log(request);
+
   console.log("The Body: " + JSON.stringify(body, null, 2));
 
   if (body?.object) {
