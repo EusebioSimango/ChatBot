@@ -3,8 +3,7 @@ import * as bodyParser from 'body-parser'
 import axios from 'axios'
 import 'dotenv/config'
 
-// var test = process.env.MY_TOKEN
-// console.log(test)
+
 const PORT = process.env.PORT
 const token = process.env.TOKEN
 const myToken = process.env.MY_TOKEN
@@ -74,5 +73,5 @@ app.post('/webhooks', (request, response) => {
 
 
 app.listen(PORT, () => {
-	console.log(">_ Server started")
+	console.log(">_ Webhook started, listening on port: "+PORT)
 })
