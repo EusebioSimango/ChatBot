@@ -71,7 +71,8 @@ routes.get("/webhooks", (request, response) => {
 
 routes.post("/webhooks", (request, response) => {
   const body: RequestBody = request.body;
-
+	console.log(request)
+	
   console.log("The Body: " + JSON.stringify(body, null, 2));
 
   if (body?.object) {
