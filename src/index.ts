@@ -38,7 +38,7 @@ app.post('/webhooks', (request, response) => {
 	const { body } =  request
 
 
-	console.log(JSON.stringify(body, null, 2))
+	console.log(JSON.stringify('The Body: ' + body, null, 2))
 
 	if (body.object){
 		if (body.entry && 
