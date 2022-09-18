@@ -2,9 +2,9 @@
   "name": "chatbot",
   "version": "1.0.0",
   "description": "WhatsApp Chatbot using webhooks",
-  "main": "./src/index.ts",
+  "main": "./build/index.js",
   "scripts": {
-    "start": "ts-node-dev src/index.ts",
+    "start": "tsc src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
