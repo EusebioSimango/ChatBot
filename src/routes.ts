@@ -51,7 +51,7 @@ routes.get("/", (request, response) => {
   return response.status(200).send("Hello, World!");
 });
 
-app.get('/webhooks', (request, response) => {
+routes.get('/webhooks', (request, response) => {
   let mode = request.query["hub.mode"]
   let challenge = request.query["hub.challenge"]
   let token = request.query["hub.verify_token"]
@@ -75,7 +75,7 @@ routes.post("/webhooks", (request, response) => {
 
   if (body?.object) {
     if (
-      body.entry &&webhooks
+      body.entry &&
       body.entry[0].changes &&
       body.entry[0].changes[0].value.messages &&
       body.entry[0].changes[0].value.messages[0]
