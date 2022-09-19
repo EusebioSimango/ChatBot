@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { format, parseISO } from 'date-fns'
 
 const options: any = {
   weekday: "long",
@@ -9,7 +9,7 @@ const options: any = {
 };
 
 interface WorldTimeAPIResponse {
-  datetime: Date;
+  datetime: string;
 }
 
 const dateAndTime = (location: string): string => {
@@ -22,7 +22,8 @@ const dateAndTime = (location: string): string => {
     .then((data) => {
       const timezoneInfo: WorldTimeAPIResponse = data;
       const { datetime } = timezoneInfo;
-      datetimeFormatted = datetime.toLocaleDateString("en-US", options);
+      console.log(typeof datetime, typeof parseISO(datetime))
+      datetimeFormatted = format(parseISO(datetime), 'yyyy-MM-dd')
     });
   return datetimeFormatted;
 };

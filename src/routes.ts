@@ -3,6 +3,7 @@ import axios from "axios";
 import { getTimeZone } from "./dateAndTime";
 
 const token = process.env.TOKEN;
+const myToken = process.env.MY_TOKEN;
 
 export const routes = Router(); // start routes
 
@@ -50,15 +51,31 @@ routes.get("/", (request, response) => {
   return response.status(200).send("Hello, World!");
 });
 
+app.get('/webhooks', (request, response) => {
+  let mode = request.query["hub.mode"]
+  let challenge = request.query["hub.challenge"]
+  let token = request.query["hub.verify_token"]
+  const myToken = process.env.MY_TOKEN
+
+  if (mode && token) {
+    if(mode == "subscribe" && token == myToken) {
+      response.status(200).send(challenge)
+    } else {
+      response.status(403)
+    }
+  }
+})
+
+
 routes.post("/webhooks", (request, response) => {
   const body: RequestBody = request.body;
-  console.log(request);
+
 
   console.log("The Body: " + JSON.stringify(body, null, 2));
 
   if (body?.object) {
     if (
-      body.entry &&
+      body.entry &&webhooks
       body.entry[0].changes &&
       body.entry[0].changes[0].value.messages &&
       body.entry[0].changes[0].value.messages[0]
@@ -88,6 +105,25 @@ routes.post("/webhooks", (request, response) => {
             "Content-Type": "application/json",
           },
         });
+      } else if (messageBody.startsWith("#calc")) {
+        const expression = messageBody.substring(5).trim();
+        const result = eval(expression)
+
+        axios({
+          method: "POST",
+          url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+          data: {
+            messaging_product: "whatsapp",
+            to: from,
+            text: {
+              body: `${expression} = ${result}`,
+            },
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
       } else {
         axios({
           method: "POST",
