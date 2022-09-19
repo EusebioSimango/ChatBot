@@ -63,6 +63,8 @@ routes.get('/webhooks', (request, response) => {
     } else {
       response.status(403)
     }
+  } else {
+    response.status(403)
   }
 })
 
