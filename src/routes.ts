@@ -47,11 +47,11 @@ interface RequestBody {
   ];
 }
 
-routes.get("/", (request, response) => {
+routes.get("/", async (request, response) => {
   return response.status(200).send("Hello, World!");
 });
 
-routes.get('/webhooks', (request, response) => {
+routes.get('/webhooks', async (request, response) => {
   let mode = request.query["hub.mode"]
   let challenge = request.query["hub.challenge"]
   let token = request.query["hub.verify_token"]
@@ -69,8 +69,8 @@ routes.get('/webhooks', (request, response) => {
 })
 
 
-routes.post("/webhooks", (request, response) => {
-  const body: RequestBody = request.body;
+routes.post("/webhooks", async (request, response) => {
+  const body: RequestBody = await request.body;
 
 
   console.log("The Body: " + JSON.stringify(body, null, 2));
