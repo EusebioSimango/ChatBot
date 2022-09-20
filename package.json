@@ -27,6 +27,7 @@
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
-    "express-x-hub": "^1.0.4"
+    "express-x-hub": "^1.0.4",
+    "node-nlp": "^4.24.0"
   }
 }
