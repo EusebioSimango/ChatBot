@@ -4,7 +4,7 @@
   "description": "WhatsApp Chatbot using webhooks",
   "main": "./build/index.js",
   "scripts": {
-    "start": "node public/index.js",
+    "start": "node src/index.js",
     "build": "tsc src/index.ts",
     "dev": "ts-node-dev src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
