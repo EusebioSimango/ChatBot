@@ -3,7 +3,7 @@ import * as bodyParser from 'body-parser'
 import 'dotenv/config'
 import { routes } from './routes'
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT||3333
 
 
 const app = express()
