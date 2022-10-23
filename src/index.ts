@@ -1,4 +1,4 @@
-import express from 'express'
+import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import 'dotenv/config'
 import { routes } from './routes'
