@@ -72,7 +72,7 @@ routes.get('/webhooks', async (request, response) => {
 
 routes.post("/webhooks", async (request, response) => {
   const body: RequestBody = await request.body;
-  console.log("when I send a msg it gets to post", body?.entry[0].changes[0].value.metadata.phone_number_id)
+  console.log("when I send a msg it gets to post", request)
 
   console.log("The Body: " + JSON.stringify(body, null, 2));
 
