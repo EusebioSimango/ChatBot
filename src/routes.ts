@@ -60,7 +60,7 @@ routes.get('/webhooks', async (request, response) => {
   console.log(mode, challenge, token, myToken)
   if (mode && token) {
     if(mode == "subscribe" && token == myToken) {
-      response.status(200).send(challenge)
+      response.status(200).sen+d(challenge)
     } else {
       response.status(403).send("403")
     }
