@@ -7,7 +7,7 @@ const myToken = process.env.MY_TOKEN;
 
 export const routes = Router(); // start routes
 
-interface RequestBody {
+export interface RequestBody {
   object?: string;
   entry?: [
     {
