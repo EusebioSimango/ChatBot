@@ -1,5 +1,6 @@
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import 'dotenv/config'
+import axios from "axios";
 import { routes, RequestBody } from './routes'
 
 const token = process.env.TOKEN;
@@ -44,7 +45,7 @@ server.get('/webhooks', async (request: FastifyRequest<{Querystring:WebhookQuery
   }
 })
 
-server.post("/webhooks", async (request: FastifyRequest, reply: FastifyReply) => {
+server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, reply: FastifyReply) => {
   const body: RequestBody = await request.body;
   console.log("when I send a msg it gets to post", request.body)
 
