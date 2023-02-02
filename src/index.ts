@@ -1,7 +1,7 @@
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import 'dotenv/config'
 import axios from "axios";
-import { routes, RequestBody } from './routes'
+import { RequestBody } from './routes'
 
 const token = process.env.TOKEN;
 const myToken = process.env.MY_TOKEN;
