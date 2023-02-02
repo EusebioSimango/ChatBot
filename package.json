@@ -1,12 +1,15 @@
 {
   "name": "chatbot",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=16 <17"
+  },
   "description": "WhatsApp Chatbot using webhooks",
   "main": "./build/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "build": "tsup src/index.ts",
-    "build:render": " npm install && tsup src/index.ts",
+    "build": "tsup src/",
+    "build:render": " npm install && tsup src/",
     "dev": "tsx watch src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
