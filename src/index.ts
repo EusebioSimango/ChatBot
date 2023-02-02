@@ -78,9 +78,9 @@ server.post("/webhooks", async (request: FastifyRequest, reply: FastifyReply) =>
         },
       });
 
-      response.sendStatus(200);
+      reply.sendStatus(200);
     } else {
-      response.sendStatus(404);
+      reply.sendStatus(404);
     }
   }
 });
