@@ -90,8 +90,10 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
         url: 'https://esimas.up.railway.app/chat',
         params: {name: `${(name) ? name : from}`, message: messageBody}
       }).then( (response: any) => response.data)
-        .then( (data: any) => sendMessageToWhatsApp(data.answer[0]!, from, phoneNumberId, token))
-        .catch((error: any) => console.error(error))
+        .then( (data: any) => {
+          const answers: string[] = data.answer
+          answers.forEach( answer => sendMessageToWhatsApp(answer, from, phoneNumberId, token))
+        }).catch((error: any) => console.error(error))
 
       
 
