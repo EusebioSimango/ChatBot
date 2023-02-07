@@ -77,19 +77,18 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       const phoneNumberId =
         body.entry[0].changes[0].value.metadata.phone_number_id;
       const from = body.entry[0].changes[0].value.messages[0].from;
+      const name = body.entry[0].changes[0].value.profile?.name;
       const messageBody = body.entry[0].changes[0].value.messages[0].text.body;
 
       // ESimas
 
-      console.log(`${from} said ${messageBody}`);
+      console.log(`${name} said ${messageBody}`);
       axios({
         method: 'POST',
-        url: 'esimas.up.railway.app/chat',
+        url: 'https://esimas.up.railway.app/chat',
         params: {name: from, message: messageBody}
       }).then( (response: any) => response.data)
-        .then( (data: any) =>  {
-          sendMessageToWhatsApp(data.answer[0]!, from)
-        })
+        .then( (data: any) => sendMessageToWhatsApp(data.answer[0]!, name))
         .catch((error: any) => console.error(error))
 
       
