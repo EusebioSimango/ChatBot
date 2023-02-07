@@ -19,6 +19,22 @@ interface WebhookQuery {
 
 const server = fastify({ logger: true })
 
+const sendMessageToWhatsApp = (message: string, to: string) => {
+  axios({
+    method: "POST",
+    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+    data: {
+      messaging_product: "whatsapp",
+      to: to,
+      text: {
+        body: message,
+      },
+    },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
 
 server.get('/', async (request: MyRequest, reply: FastifyReply) => {
 	const { msg } = request.query
@@ -63,21 +79,20 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       const from = body.entry[0].changes[0].value.messages[0].from;
       const messageBody = body.entry[0].changes[0].value.messages[0].text.body;
 
+      // ESimas
+
       console.log(`${from} said ${messageBody}`);
       axios({
-        method: "POST",
-        url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
-        data: {
-          messaging_product: "whatsapp",
-          to: from,
-          text: {
-            body: "Hi.. I'm ESimas Bot",
-          },
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+        method: 'POST',
+        url: 'esimas.up.railway.app/chat',
+        params: {name: from, message: messageBody}
+      }).then( (response: any) => response.data)
+        .then( (data: any) =>  {
+          sendMessageToWhatsApp(data.answer[0]!, from)
+        })
+        .catch((error: any) => console.error(error))
+
+      
 
       reply.status(200).send();
     } else {
