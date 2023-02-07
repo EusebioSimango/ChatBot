@@ -86,7 +86,7 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
   }
 });
 
-server.listen({ port: 3333 }, (err: any, address?: string) => {
+server.listen({ port: process.env.PORT!, host: '0.0.0.0' }, (err: any, address?: string) => {
 	if (err) {
 		server.log.error(err)
 		process.exit(1)
