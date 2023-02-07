@@ -20,6 +20,7 @@ interface WebhookQuery {
 const server = fastify({ logger: true })
 
 const sendMessageToWhatsApp = (message: string, to: string, phoneNumberId: string, token: string) => {
+  console.log(message, to, phoneNumberId, token)
   axios({
     method: "POST",
     url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
@@ -33,7 +34,8 @@ const sendMessageToWhatsApp = (message: string, to: string, phoneNumberId: strin
     headers: {
       "Content-Type": "application/json",
     },
-  });
+  }).then((response: any) => console.log('message sent!'))
+    .catch((err: any) => console.error(err));
 }
 
 server.get('/', async (request: MyRequest, reply: FastifyReply) => {
@@ -82,7 +84,7 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
 
       // ESimas
 
-      console.log(`${name} said ${messageBody}`);
+      console.log(`${ (name) ? name : from} said ${messageBody}`);
       axios({
         method: 'POST',
         url: 'https://esimas.up.railway.app/chat',
