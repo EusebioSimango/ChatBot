@@ -7,7 +7,7 @@
   "description": "WhatsApp Chatbot using webhooks",
   "main": "./build/index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node dist/index.js",
     "build": "tsup src/",
     "build:render": " npm install && tsup src/",
     "dev": "tsx watch src/index.ts",

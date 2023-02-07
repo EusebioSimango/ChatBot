@@ -4,7 +4,7 @@ import axios from "axios";
 import { RequestBody } from './routes'
 
 const token = process.env.TOKEN;
-const myToken = process.env.MY_TOKEN;
+const myToken = process.env.TOKEN;
 type MyRequest = FastifyRequest<{
 	Querystring:  {
 		msg?: string
@@ -32,7 +32,7 @@ server.get('/webhooks', async (request: FastifyRequest<{Querystring:WebhookQuery
   let token = request.query["hub.verify_token"]
  
   
-  const myToken = process.env.MY_TOKEN
+  
   console.log(mode, challenge, token, myToken)
   if (mode && token) {
     if(mode == "subscribe" && token == myToken) {
