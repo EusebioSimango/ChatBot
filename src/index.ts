@@ -88,9 +88,9 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       axios({
         method: 'POST',
         url: 'https://esimas.up.railway.app/chat',
-        params: {name: from, message: messageBody}
+        params: {name: `${(name) ? name : from}`, message: messageBody}
       }).then( (response: any) => response.data)
-        .then( (data: any) => sendMessageToWhatsApp(data.answer[0]!, name, phoneNumberId, token))
+        .then( (data: any) => sendMessageToWhatsApp(data.answer[0]!, from, phoneNumberId, token))
         .catch((error: any) => console.error(error))
 
       
