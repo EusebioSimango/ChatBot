@@ -38,6 +38,24 @@ const sendMessageToWhatsApp = (message: string, to: string, phoneNumberId: strin
     .catch((err: any) => console.error(err));
 }
 
+const notifyOwner = (message: string, name: string, phoneNumberId: string, token: string) => {
+  axios({
+    method: "POST",
+    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+    data: {
+      messaging_product: "whatsapp",
+      to: "258850143767",
+      text: {
+        body: `${name} - ${message}`,
+      },
+    },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response: any) => console.log('message sent!'))
+    .catch((err: any) => console.error(err));
+}
+
 server.get('/', async (request: MyRequest, reply: FastifyReply) => {
 	const { msg } = request.query
 	console.log(request.body)
@@ -65,9 +83,6 @@ server.get('/webhooks', async (request: FastifyRequest<{Querystring:WebhookQuery
 
 server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, reply: FastifyReply) => {
   const body: RequestBody = await request.body;
-  console.log("when I send a msg it gets to post", request.body)
-
-  console.log("The Body: " + JSON.stringify(body, null, 2));
 
   if (body?.object) {
     if (
@@ -79,12 +94,15 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       const phoneNumberId =
         body.entry[0].changes[0].value.metadata.phone_number_id;
       const from = body.entry[0].changes[0].value.messages[0].from;
-      const name = body.entry[0].changes[0].value.profile?.name;
+      const name = body.entry[0].changes[0].value.contacts[0].profile?.name;
       const messageBody = body.entry[0].changes[0].value.messages[0].text.body;
 
+      console.log(`${name} said ${messageBody}`)
+      if (from != "258850143767") {
+        notifyOwner(messageBody, name, phoneNumberId, token)
+      }
       // ESimas
 
-      console.log(`${ (name) ? name : from} said ${messageBody}`);
       axios({
         method: 'POST',
         url: 'https://esimas.up.railway.app/chat',
