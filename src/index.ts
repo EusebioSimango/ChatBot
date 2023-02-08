@@ -106,7 +106,8 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       axios({
         method: 'POST',
         url: 'https://esimas.up.railway.app/chat',
-        params: {name: `${(name) ? name : from}`, message: messageBody}
+        // params: {name: `${(name) ? name : from}`, message: messageBody}
+        params: {name: from, message: messageBody}
       }).then( (response: any) => response.data)
         .then( (data: any) => {
           const answers: string[] = data.answer
