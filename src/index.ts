@@ -3,7 +3,7 @@ import 'dotenv/config'
 import axios from "axios";
 import { RequestBody, WebhookQuery } from './routes'
 import { notifyOwner, sendTextMessage, sendAudioMessage } from './fuctions/whatsapp'
-import { searchVideoOnYoutube } from './fuctions/youtube'
+import { searchVideoOnYoutube, convertYTVideoToAudio } from './fuctions/youtube'
 import { removeCommand } from './fuctions/text'
 
 const token = process.env.TOKEN;
@@ -71,9 +71,9 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
           sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
           try {
             const audio: string = await convertYTVideoToAudio(url)
+            console.log('Got here mp3 url:', audio)
             sendAudioMessage(audio, from, phoneNumberId, token)
           } catch {
-            console.error
             sendTextMessage(`Unavailable.`, from, phoneNumberId, token)
           }
         } catch {
