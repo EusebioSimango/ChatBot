@@ -33,6 +33,7 @@ export const convertYTVideoToAudio = async (url: string) => {
 	}).catch((err: any) => console.error(err))
 
 	const { file } = response.data
+	console.log('Convertion succesfully:', file)
 	return file
 }
 

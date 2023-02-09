@@ -66,15 +66,14 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       const messageLower = messageBody.toLowerCase()
       if (messageLower.includes('#audio')) {
         const query = removeCommand('#audio', messageLower)
-        const { title, url } = await searchVideoOnYoutube(query)
+        searchVideoOnYoutube(query)
+          .then(({ title, url }) => {
+            sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
+            convertYTVideoToAudio(url)
+              .then((audio: string) => sendAudioMessage(audio, from, phoneNumberId, token))
+              .catch( () => sendTextMessage(`Unavailable.`, from, phoneNumberId, token))
+          })
           .catch( () => sendTextMessage(`Not Founded.`, from, phoneNumberId, token))
-
-        sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
-        const audio: string = await convertYTVideoToAudio(url)
-          .catch( () => sendTextMessage(`Unavailable.`, from, phoneNumberId, token))
-
-        sendAudioMessage(audio, from, phoneNumberId, token)
-
       }
       else if (messageLower.includes('#gpt')) {
         const query = removeCommand('#gpt', messageLower)
