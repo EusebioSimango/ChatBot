@@ -58,7 +58,7 @@ export const sendImageMessage = async (link: string, caption: string, to: string
     .catch((err: any) => console.error(err));
 }
 
-export const sendDocumentMessage = (link: string, caption: string, from: string, phoneNumberId: string, token: string) => {
+export const sendDocument = (link: string, caption: string, from: string, phoneNumberId: string, token: string) => {
 	axios({
     method: "POST",
     url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
@@ -66,7 +66,7 @@ export const sendDocumentMessage = (link: string, caption: string, from: string,
       messaging_product: "whatsapp",
       to,
       type: "document",
-      image: {
+      document: {
         link,
         caption,
       }, 
