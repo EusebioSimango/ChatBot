@@ -1,7 +1,8 @@
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import 'dotenv/config'
 import axios from "axios";
-import { RequestBody } from './routes'
+import { RequestBody, WebhookQuery } from './routes'
+import { notifyOwner, sendTextMessage } from './fuctions/whatsapp'
 
 const token = process.env.TOKEN;
 const myToken = process.env.TOKEN;
@@ -10,51 +11,11 @@ type MyRequest = FastifyRequest<{
 		msg?: string
 	}
 }>
-interface WebhookQuery {
-	'hub.mode'?: string | number,
-	'hub.challenge'?: string | number,
-	'hub.verify_token'?: string | number
-}
 
 
 const server = fastify({ logger: true })
 
-const sendMessageToWhatsApp = (message: string, to: string, phoneNumberId: string, token: string) => {
-  console.log(message, to, phoneNumberId, token)
-  axios({
-    method: "POST",
-    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
-    data: {
-      messaging_product: "whatsapp",
-      to: to,
-      text: {
-        body: message,
-      },
-    },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((response: any) => console.log('message sent!'))
-    .catch((err: any) => console.error(err));
-}
 
-const notifyOwner = (message: string, name: string, phoneNumberId: string, token: string) => {
-  axios({
-    method: "POST",
-    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
-    data: {
-      messaging_product: "whatsapp",
-      to: "258850143767",
-      text: {
-        body: `${name} - ${message}`,
-      },
-    },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((response: any) => console.log('message sent!'))
-    .catch((err: any) => console.error(err));
-}
 
 server.get('/', async (request: MyRequest, reply: FastifyReply) => {
 	const { msg } = request.query
@@ -66,8 +27,6 @@ server.get('/webhooks', async (request: FastifyRequest<{Querystring:WebhookQuery
   let mode = request.query["hub.mode"]
   let challenge = request.query["hub.challenge"]
   let token = request.query["hub.verify_token"]
- 
-  
   
   console.log(mode, challenge, token, myToken)
   if (mode && token) {
@@ -103,18 +62,15 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       }
       // ESimas
 
-      axios({
+       axios({
         method: 'POST',
         url: 'https://esimas.up.railway.app/chat',
-        // params: {name: `${(name) ? name : from}`, message: messageBody}
         params: {name: from, message: messageBody}
       }).then( (response: any) => response.data)
         .then( (data: any) => {
           const answers: string[] = data.answer
-          answers.forEach( answer => sendMessageToWhatsApp(answer, from, phoneNumberId, token))
+          answers.forEach( answer => sendTextMessage(answer, from, phoneNumberId, token))
         }).catch((error: any) => console.error(error))
-
-      
 
       reply.status(200).send();
     } else {
