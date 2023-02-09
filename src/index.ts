@@ -79,8 +79,8 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
           sendTextMessage(`Not Founded.`, from, phoneNumberId, token) 
         }
       }
-      else if (messageLower.includes('#audio-doc')) {
-        const query = removeCommand('#audio-doc', messageLower)
+      else if (messageLower.includes('#doc-audio')) {
+        const query = removeCommand('#doc-audio', messageLower)
         try {
           const { title, url } = await searchVideoOnYoutube(query)
           sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
