@@ -15,7 +15,7 @@ export const sendTextMessage = (message: string, to: string, phoneNumberId: stri
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((response: any) => console.log('message sent!'))
+  }).then((response: any) => console.log('>_ text sent to', to))
     .catch((err: any) => console.error(err));
 }
 
@@ -34,7 +34,7 @@ export const sendAudioMessage = async (link: string, to: string, phoneNumberId: 
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((response: any) => console.log('audio sent!'))
+  }).then((response: any) => console.log('>_ audio sent to', to))
     .catch((err: any) => console.error(err));
 }
 
@@ -54,7 +54,7 @@ export const sendImageMessage = async (link: string, caption: string, to: string
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((response: any) => console.log('audio sent!'))
+  }).then((response: any) => console.log('>_ image sent to', to))
     .catch((err: any) => console.error(err));
 }
 

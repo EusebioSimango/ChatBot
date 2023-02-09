@@ -71,7 +71,6 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
           sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
           try {
             const audio: string = await convertYTVideoToAudio(url)
-            console.log('Got here mp3 url:', audio)
             sendAudioMessage(audio, from, phoneNumberId, token)
           } catch {
             sendTextMessage(`Unavailable.`, from, phoneNumberId, token)

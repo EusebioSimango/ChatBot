@@ -33,14 +33,5 @@ export const convertYTVideoToAudio = async (url: string) => {
 	}).catch((err: any) => console.error(err))
 
 	const { file } = response.data
-	console.log('Convertion succesfully:', file)
 	return file
 }
-
-// async function __main__ () {
-// 	const file = await convertYTVideoToAudio('https://youtube.com/watch?v=sETfYW1wJ9w')
-// 	console.log(file)
-// 	// const video = await searchVideoOnYoutube('ugly crier')
-// 	// console.log(video)
-// }
-// __main__()
