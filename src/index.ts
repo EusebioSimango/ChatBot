@@ -73,6 +73,7 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
             const audio: string = await convertYTVideoToAudio(url)
             sendAudioMessage(audio, from, phoneNumberId, token)
           } catch {
+            console.error
             sendTextMessage(`Unavailable.`, from, phoneNumberId, token)
           }
         } catch {

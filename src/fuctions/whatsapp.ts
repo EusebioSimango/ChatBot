@@ -2,7 +2,6 @@ import axios from 'axios'
 
 
 export const sendTextMessage = (message: string, to: string, phoneNumberId: string, token: string) => {
-  console.log(message, to, phoneNumberId, token)
   axios({
     method: "POST",
     url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
