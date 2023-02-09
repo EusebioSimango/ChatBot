@@ -2,7 +2,7 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import 'dotenv/config'
 import axios from "axios";
 import { RequestBody, WebhookQuery } from './routes'
-import { notifyOwner, sendTextMessage, sendAudioMessage } from './fuctions/whatsapp'
+import { notifyOwner, sendTextMessage, sendAudioMessage, sendDocumentMessage } from './fuctions/whatsapp'
 import { searchVideoOnYoutube, convertYTVideoToAudio } from './fuctions/youtube'
 import { removeCommand } from './fuctions/text'
 
@@ -72,6 +72,21 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
           try {
             const audio: string = await convertYTVideoToAudio(url)
             sendAudioMessage(audio, from, phoneNumberId, token)
+          } catch {
+            sendTextMessage(`Unavailable.`, from, phoneNumberId, token)
+          }
+        } catch {
+          sendTextMessage(`Not Founded.`, from, phoneNumberId, token) 
+        }
+      }
+      else if (messageLower.includes('#audio-doc')) {
+        const query = removeCommand('#audio-doc', messageLower)
+        try {
+          const { title, url } = await searchVideoOnYoutube(query)
+          sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
+          try {
+            const audio: string = await convertYTVideoToAudio(url)
+            sendDocumentMessage(audio, title, from, phoneNumberId, token)
           } catch {
             sendTextMessage(`Unavailable.`, from, phoneNumberId, token)
           }

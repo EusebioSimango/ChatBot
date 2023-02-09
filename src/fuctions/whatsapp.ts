@@ -58,6 +58,27 @@ export const sendImageMessage = async (link: string, caption: string, to: string
     .catch((err: any) => console.error(err));
 }
 
+export const sendDocumentMessage = (link: string, caption: string, from: string, phoneNumberId: string, token: string) => {
+	axios({
+    method: "POST",
+    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+    data: {
+      messaging_product: "whatsapp",
+      to,
+      type: "document",
+      image: {
+        link,
+        caption,
+      }, 
+    },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response: any) => console.log('>_ document sent to', to))
+    .catch((err: any) => console.error(err));
+}
+
+
 export const notifyOwner = (message: string, name: string, phoneNumberId: string, token: string) => {
   axios({
     method: "POST",
@@ -72,6 +93,6 @@ export const notifyOwner = (message: string, name: string, phoneNumberId: string
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((response: any) => console.log('owner notified!'))
+  }).then((response: any) => console.log('>_ owner notified!'))
     .catch((err: any) => console.error(err));
 }
