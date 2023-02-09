@@ -2,7 +2,9 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import 'dotenv/config'
 import axios from "axios";
 import { RequestBody, WebhookQuery } from './routes'
-import { notifyOwner, sendTextMessage } from './fuctions/whatsapp'
+import { notifyOwner, sendTextMessage, sendAudioMessage } from './fuctions/whatsapp'
+import { searchVideoOnYoutube } from './fuctions/youtube'
+import { removeCommand } from './fuctions/text'
 
 const token = process.env.TOKEN;
 const myToken = process.env.TOKEN;
@@ -61,16 +63,42 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
         notifyOwner(messageBody, name, phoneNumberId, token)
       }
       // ESimas
+      const messageLower = messageBody.toLowerCase()
+      if (messageLower.includes('#audio')) {
+        const query = removeCommand('#audio', messageLower)
+        const { title, timeInSeconds, videoId, url } = await searchVideoOnYoutube(query)
+          .catch( () => sendTextMessage(`Not Founded.`, from, phoneNumberId, token))
 
-       axios({
-        method: 'POST',
-        url: 'https://esimas.up.railway.app/chat',
-        params: {name: from, message: messageBody}
-      }).then( (response: any) => response.data)
-        .then( (data: any) => {
-          const answers: string[] = data.answer
-          answers.forEach( answer => sendTextMessage(answer, from, phoneNumberId, token))
-        }).catch((error: any) => console.error(error))
+        sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
+        const audio: string = await convertYTVideoToAudio(url)
+          .catch( () => sendTextMessage(`Unavailable.`, from, phoneNumberId, token))
+
+        sendAudioMessage(audio, from, phoneNumberId, token)
+
+      }
+      else if (messageLower.includes('#gpt')) {
+        const query = removeCommand('#gpt', messageLower)
+        axios({
+          method: 'POST',
+          url: 'https://esimas.up.railway.app/davinci',
+          params: {name: from, message: query}
+        }).then( (response: any) => response.data)
+          .then( (data: any) => {
+            const answer: string = data.answer
+            sendTextMessage(answer, from, phoneNumberId, token)
+          }).catch((error: any) => console.error(error))
+      }
+      else {
+        axios({
+          method: 'POST',
+          url: 'https://esimas.up.railway.app/chat',
+          params: {name: from, message: messageBody}
+        }).then( (response: any) => response.data)
+          .then( (data: any) => {
+            const answers: string[] = data.answer
+            answers.forEach( answer => sendTextMessage(answer, from, phoneNumberId, token))
+          }).catch((error: any) => console.error(error))
+      }
 
       reply.status(200).send();
     } else {

@@ -27,7 +27,7 @@ export const sendAudioMessage = async (link: string, to: string, phoneNumberId: 
     data: {
       messaging_product: "whatsapp",
       to,
-      type: "audio"
+      type: "audio",
       audio: {
         link,
       }, 
@@ -46,7 +46,7 @@ export const sendImageMessage = async (link: string, caption: string, to: string
     data: {
       messaging_product: "whatsapp",
       to,
-      type: "image"
+      type: "image",
       image: {
         link,
         caption,

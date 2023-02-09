@@ -1,9 +1,6 @@
 {
   "name": "chatbot",
   "version": "1.0.0",
-  "engines": {
-    "node": ">=16 <17"
-  },
   "description": "WhatsApp Chatbot using webhooks",
   "main": "./build/index.js",
   "scripts": {
@@ -11,6 +8,7 @@
     "build": "tsup src/",
     "build:render": " npm install && tsup src/",
     "dev": "tsx watch src/index.ts",
+    "test:yt": "tsx src/fuctions/youtube.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,6 +17,7 @@
   "author": "Eusébio Simango",
   "license": "MIT",
   "devDependencies": {
+    "@types/yt-search": "^2.3.2",
     "tslib": "^2.4.0",
     "tsup": "^6.5.0",
     "tsx": "^3.12.2",
@@ -29,6 +28,7 @@
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.2",
     "express-x-hub": "^1.0.4",
-    "fastify": "^4.12.0"
+    "fastify": "^4.12.0",
+    "yt-search": "^2.10.4"
   }
 }
