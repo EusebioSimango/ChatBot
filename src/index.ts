@@ -58,6 +58,18 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       const name = body.entry[0].changes[0].value.contacts[0].profile?.name;
       const messageBody = body.entry[0].changes[0].value.messages[0].text.body;
 
+      const askDavinci = async (query: string) => {
+        axios({
+          method: 'POST',
+          url: 'https://esimas.up.railway.app/davinci',
+          params: {name: from, message: query}
+        }).then( (response: any) => response.data)
+          .then( (data: any) => {
+            const answer: string = data.answer
+            sendTextMessage(answer, from, phoneNumberId, token)
+          }).catch((error: any) => console.error(error))
+      }
+
       console.log(`${name} said ${messageBody}`)
       if (from != "258850143767") {
         notifyOwner(messageBody, name, phoneNumberId, token)
@@ -96,27 +108,26 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       }
       else if (messageLower.includes('#gpt')) {
         const query = removeCommand('#gpt', messageLower)
-        axios({
-          method: 'POST',
-          url: 'https://esimas.up.railway.app/davinci',
-          params: {name: from, message: query}
-        }).then( (response: any) => response.data)
-          .then( (data: any) => {
-            const answer: string = data.answer
-            sendTextMessage(answer, from, phoneNumberId, token)
-          }).catch((error: any) => console.error(error))
+        askDavinci(query)
       }
       else if (messageLower.includes('#emoji')) {
-        const query = removeCommand('#emoji', messageLower)
-        axios({
-          method: 'POST',
-          url: 'https://esimas.up.railway.app/davinci',
-          params: {name: from, message: `O que esse emoji significa ${query}?`}
-        }).then( (response: any) => response.data)
-          .then( (data: any) => {
-            const answer: string = data.answer
-            sendTextMessage(answer, from, phoneNumberId, token)
-          }).catch((error: any) => console.error(error))
+        const emoji = removeCommand('#emoji', messageLower)
+        const query = `O que esse emoji significa ${query}?`
+        askDavinci(query)
+      }
+      else if (messageLower.includes('#name')) {
+        const name = removeCommand('#name', messageLower)
+        const query = `What does the name ${name} means?`
+        askDavinci(query)
+      }
+      else if (messageLower.includes('#nome')) {
+        const name = removeCommand('#nome', messageLower)
+        const query = `Qual o significado do nome ${name}?`
+        askDavinci(query)
+      }
+      else if (messageLower.includes('#biblia')) {
+        const query = removeCommand('#biblia', messageLower)
+        askDavinci(query)
       }
       else {
         axios({
