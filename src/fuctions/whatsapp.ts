@@ -4,7 +4,7 @@ import axios from 'axios'
 export const sendTextMessage = (message: string, to: string, phoneNumberId: string, token: string) => {
   axios({
     method: "POST",
-    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+    url: `https://graph.facebook.com/v15.0/${phoneNumberId}/messages?access_token=${token}`,
     data: {
       messaging_product: "whatsapp",
       to,
@@ -22,7 +22,7 @@ export const sendTextMessage = (message: string, to: string, phoneNumberId: stri
 export const sendAudioMessage = async (link: string, to: string, phoneNumberId: string, token: string) => {
 	axios({
     method: "POST",
-    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+    url: `https://graph.facebook.com/v15.0/${phoneNumberId}/messages?access_token=${token}`,
     data: {
       messaging_product: "whatsapp",
       to,
@@ -41,7 +41,7 @@ export const sendAudioMessage = async (link: string, to: string, phoneNumberId: 
 export const sendImageMessage = async (link: string, caption: string, to: string, phoneNumberId: string, token: string) => {
 	axios({
     method: "POST",
-    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+    url: `https://graph.facebook.com/v15.0/${phoneNumberId}/messages?access_token=${token}`,
     data: {
       messaging_product: "whatsapp",
       to,
@@ -58,18 +58,17 @@ export const sendImageMessage = async (link: string, caption: string, to: string
     .catch((err: any) => console.error(err));
 }
 
-export const sendDocument = (link: string, caption: string, from: string, phoneNumberId: string, token: string) => {
+export const sendDocument = (link: string, filename: string, to: string, phoneNumberId: string, token: string) => {
 	axios({
     method: "POST",
-    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+    url: `https://graph.facebook.com/v15.0/${phoneNumberId}/messages?access_token=${token}`,
     data: {
       messaging_product: "whatsapp",
       to,
       type: "document",
       document: {
         link,
-        caption,
-        filename: caption
+        filename
       }, 
     },
     headers: {
@@ -83,7 +82,7 @@ export const sendDocument = (link: string, caption: string, from: string, phoneN
 export const notifyOwner = (message: string, name: string, phoneNumberId: string, token: string) => {
   axios({
     method: "POST",
-    url: `https://graph.facebook.com/v14.0/${phoneNumberId}/messages?access_token=${token}`,
+    url: `https://graph.facebook.com/v15.0/${phoneNumberId}/messages?access_token=${token}`,
     data: {
       messaging_product: "whatsapp",
       to: "258850143767",
