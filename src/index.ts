@@ -126,7 +126,8 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
         askDavinci(query)
       }
       else if (messageLower.includes('#biblia')) {
-        const query = removeCommand('#biblia', messageLower)
+        const referencia = removeCommand('#biblia', messageLower)
+        const query = `Biblia em portugues, ${referencia}, mostre a escritura e a referência.`
         askDavinci(query)
       }
       else {
