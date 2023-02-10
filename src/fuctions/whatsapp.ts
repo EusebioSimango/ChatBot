@@ -69,6 +69,7 @@ export const sendDocument = (link: string, caption: string, from: string, phoneN
       document: {
         link,
         caption,
+        filename: caption
       }, 
     },
     headers: {

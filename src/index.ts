@@ -106,6 +106,18 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
             sendTextMessage(answer, from, phoneNumberId, token)
           }).catch((error: any) => console.error(error))
       }
+      else if (messageLower.includes('#emoji')) {
+        const query = removeCommand('#emoji', messageLower)
+        axios({
+          method: 'POST',
+          url: 'https://esimas.up.railway.app/davinci',
+          params: {name: from, message: `O que esse emoji significa ${query}?`}
+        }).then( (response: any) => response.data)
+          .then( (data: any) => {
+            const answer: string = data.answer
+            sendTextMessage(answer, from, phoneNumberId, token)
+          }).catch((error: any) => console.error(error))
+      }
       else {
         axios({
           method: 'POST',
