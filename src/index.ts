@@ -112,7 +112,7 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
       }
       else if (messageLower.includes('#emoji')) {
         const emoji = removeCommand('#emoji', messageLower)
-        const query = `O que esse emoji significa ${query}?`
+        const query = `O que esse emoji significa ${emoji}?`
         askDavinci(query)
       }
       else if (messageLower.includes('#name')) {
