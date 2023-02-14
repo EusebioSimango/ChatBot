@@ -6,7 +6,6 @@ import { notifyOwner, sendTextMessage, sendAudioMessage, sendDocument } from './
 import { searchVideoOnYoutube, convertYTVideoToAudio } from './fuctions/youtube'
 import { removeCommand } from './fuctions/text'
 
-const token = process.env.TOKEN;
 const myToken = process.env.TOKEN;
 type MyRequest = FastifyRequest<{
 	Querystring:  {
@@ -30,7 +29,7 @@ server.get('/webhooks', async (request: FastifyRequest<{Querystring:WebhookQuery
   let challenge = request.query["hub.challenge"]
   let token = request.query["hub.verify_token"]
   
-  console.log(mode, challenge, token, myToken)
+  console.log(mode, challenge, ttoken, myToken)
   if (mode && token) {
     if(mode == "subscribe" && token == myToken) {
       reply.status(200).send(challenge)
@@ -66,13 +65,13 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
         }).then( (response: any) => response.data)
           .then( (data: any) => {
             const answer: string = data.answer
-            sendTextMessage(answer, from, phoneNumberId, token)
+            sendTextMessage(answer, from, phoneNumberId)
           }).catch((error: any) => console.error(error))
       }
 
       console.log(`${name} said ${messageBody}`)
       if (from != "258850143767") {
-        notifyOwner(messageBody, name, phoneNumberId, token)
+        notifyOwner(messageBody, name, phoneNumberId)
       }
       // ESimas
       const messageLower = messageBody.toLowerCase()
@@ -80,30 +79,30 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
         const query = removeCommand('#audio', messageLower)
         try {
           const { title, url } = await searchVideoOnYoutube(query)
-          sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
+          sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId)
           try {
             const audio: string = await convertYTVideoToAudio(url)
-            sendAudioMessage(audio, from, phoneNumberId, token)
+            sendAudioMessage(audio, from, phoneNumberId)
           } catch {
-            sendTextMessage(`Unavailable.`, from, phoneNumberId, token)
+            sendTextMessage(`Unavailable.`, from, phoneNumberId)
           }
         } catch {
-          sendTextMessage(`Not Founded.`, from, phoneNumberId, token) 
+          sendTextMessage(`Not Founded.`, from, phoneNumberId) 
         }
       }
       else if (messageLower.includes('#doc-audio')) {
         const query = removeCommand('#doc-audio', messageLower)
         try {
           const { title, url } = await searchVideoOnYoutube(query)
-          sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId, token)
+          sendTextMessage(`Wait, downloading ${title}.`, from, phoneNumberId)
           try {
             const audio: string = await convertYTVideoToAudio(url)
-            sendDocument(audio, title, from, phoneNumberId, token)
+            sendDocument(audio, title, from, phoneNumberId)
           } catch {
-            sendTextMessage(`Unavailable.`, from, phoneNumberId, token)
+            sendTextMessage(`Unavailable.`, from, phoneNumberId)
           }
         } catch {
-          sendTextMessage(`Not Founded.`, from, phoneNumberId, token) 
+          sendTextMessage(`Not Founded.`, from, phoneNumberId) 
         }
       }
       else if (messageLower.includes('#gpt')) {
@@ -138,7 +137,7 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
         }).then( (response: any) => response.data)
           .then( (data: any) => {
             const answers: string[] = data.answer
-            answers.forEach( answer => sendTextMessage(answer, from, phoneNumberId, token))
+            answers.forEach( answer => sendTextMessage(answer, from, phoneNumberId))
           }).catch((error: any) => console.error(error))
       }
 

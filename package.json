@@ -28,6 +28,7 @@
     "dotenv": "^16.0.2",
     "fastify": "^4.12.0",
     "node-fetch": "^3.3.0",
-    "youtube-sr": "^4.3.4"
+    "youtube-sr": "^4.3.4",
+    "ytdl-core": "^4.11.2"
   }
 }
