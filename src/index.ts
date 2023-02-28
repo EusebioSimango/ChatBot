@@ -1,7 +1,7 @@
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import 'dotenv/config'
 import axios from "axios";
-import { RequestBody, WebhookQuery } from './routes'
+import { RequestBody, WebhookQuery, NewsletterQuery } from './routes'
 import { notifyOwner, sendTextMessage, sendAudioMessage, sendDocument } from './fuctions/whatsapp'
 import { searchVideoOnYoutube, convertYTVideoToAudio } from './fuctions/youtube'
 import { removeCommand } from './fuctions/text'
@@ -147,6 +147,19 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
     }
   }
 });
+
+app.post("/newsletter", (request: FastifyRequest<{ Querystring: NewsletterQuery }>, reply: FastifyReply) => {
+  const { from, body: message} = request.query
+  if (!(from && message))
+    return reply.status(403).send({ message: 'Bad Request'})
+
+  try {
+    sendNewsletter(message, from)
+    reply.status(201).send({ message: 'Newsletter Sent'})
+  } catch {
+    reply.status(500).send({ message: 'Internal Server Error'})
+  }
+})
 
 server.listen({ port: process.env.PORT!, host: '0.0.0.0' }, (err: any, address?: string) => {
 	if (err) {

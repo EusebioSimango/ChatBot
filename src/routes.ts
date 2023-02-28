@@ -50,6 +50,11 @@ export interface WebhookQuery {
   'hub.verify_token'?: string | number
 }
 
+export interface NewsletterQuery{
+  from: string,
+  body: string
+}
+
 
 // routes.post("/webhooks", async (request, response) => {
 //   const body: RequestBody = await request.body;
