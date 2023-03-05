@@ -148,7 +148,7 @@ server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, 
   }
 });
 
-app.post("/newsletter", (request: FastifyRequest<{ Querystring: NewsletterQuery }>, reply: FastifyReply) => {
+server.post("/newsletter", (request: FastifyRequest<{ Querystring: NewsletterQuery }>, reply: FastifyReply) => {
   const { from, body: message} = request.query
   if (!(from && message))
     return reply.status(403).send({ message: 'Bad Request'})
