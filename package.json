@@ -31,7 +31,6 @@
     "dotenv": "^16.0.2",
     "fastify": "^4.12.0",
     "node-fetch": "^3.3.0",
-    "youtube-mp3-downloader": "^0.7.11",
     "youtube-sr": "^4.3.4"
   }
 }

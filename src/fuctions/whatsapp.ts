@@ -108,7 +108,7 @@ export const sendNewsletter = (message: string, from: string) => {
       messaging_product: "whatsapp",
       to: "258850143767",
       text: {
-        body: `*${from}*\n\n${message}`,
+        body: `*${from}*/n/n${message}`,
       },
     },
     headers: {
