@@ -20,7 +20,7 @@ const server = fastify({ logger: false })
 
 server.get('/', async (request: MyRequest, reply: FastifyReply) => {
 	const { msg } = request.query
-	console.log(request.body)
+	console.log(myToken)
 	return { message: msg || 'Hello, World!' }
 })
 
