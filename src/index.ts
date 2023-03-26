@@ -17,7 +17,7 @@ server.get('/', async (request: FastifyRequest<{Querystring:WebhookQuery}>, repl
   let challenge = request.query["hub.challenge"]
   let token = request.query["hub.verify_token"]
   
-  console.log(mode, challenge, ttoken, myToken)
+  console.log(mode, challenge, token, myToken)
   if (mode && token) {
     if(mode == "subscribe" && token == myToken) {
       reply.status(200).send(challenge)
