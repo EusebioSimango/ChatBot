@@ -7,24 +7,12 @@ import { searchVideoOnYoutube, convertYTVideoToAudio } from './fuctions/youtube'
 import { removeCommand } from './fuctions/text'
 
 const myToken = process.env.TOKEN;
-type MyRequest = FastifyRequest<{
-	Querystring:  {
-		msg?: string
-	}
-}>
 
 
 const server = fastify({ logger: false })
 
 
-
-server.get('/', async (request: MyRequest, reply: FastifyReply) => {
-	const { msg } = request.query
-	console.log(myToken)
-	return { message: msg || 'Hello, World!' }
-})
-
-server.get('/webhooks', async (request: FastifyRequest<{Querystring:WebhookQuery}>, reply: FastifyReply) => {
+server.get('/', async (request: FastifyRequest<{Querystring:WebhookQuery}>, reply: FastifyReply) => {
   let mode = request.query["hub.mode"]
   let challenge = request.query["hub.challenge"]
   let token = request.query["hub.verify_token"]
@@ -38,10 +26,11 @@ server.get('/webhooks', async (request: FastifyRequest<{Querystring:WebhookQuery
     }
   } else {
     reply.status(403).send("403")
+    return { message: msg || 'Hello, World!' }
   }
 })
 
-server.post("/webhooks", async (request: FastifyRequest<{ Body: RequestBody }>, reply: FastifyReply) => {
+server.post("/", async (request: FastifyRequest<{ Body: RequestBody }>, reply: FastifyReply) => {
   const body: RequestBody = await request.body;
 
   if (body?.object) {
