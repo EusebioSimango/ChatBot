@@ -49,7 +49,7 @@ server.post("/", async (request: FastifyRequest<{ Body: RequestBody }>, reply: F
       const askDavinci = async (query: string) => {
         axios({
           method: 'POST',
-          url: 'https://esimas.up.railway.app/davinci',
+          url: 'https://esimas.onrender.com/davinci',
           params: {name: from, message: query}
         }).then( (response: any) => response.data)
           .then( (data: any) => {
@@ -121,7 +121,7 @@ server.post("/", async (request: FastifyRequest<{ Body: RequestBody }>, reply: F
       else {
         axios({
           method: 'POST',
-          url: 'https://esimas.up.railway.app/chat',
+          url: 'https://esimas.onrender.com/chat',
           params: {name: from, message: messageBody}
         }).then( (response: any) => response.data)
           .then( (data: any) => {
