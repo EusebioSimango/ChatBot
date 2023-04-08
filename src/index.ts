@@ -117,6 +117,19 @@ server.post("/", async (request: FastifyRequest<{ Body: RequestBody }>, reply: F
         const referencia = removeCommand('#biblia', messageLower)
         const query = `Biblia em portugues, ${referencia}, mostre a escritura e a referência.`
         askDavinci(query)
+      } 
+      else if (messageLower.includes('#tell')) {
+        const ref = removeCommand('#tell', messageLower)
+        const people = [
+          { name: 'shasha ', id: "258842787852"},
+          { name: 'me ',     id: "258850143767"}
+        ]
+        people.forEach( (person: string) => {
+          if (ref.includes(person.name)) {
+            const msg = ref.replace(person.name, '')
+            sendTextMessage(msg, person.id, phoneNumberId)
+          }
+        })
       }
       else {
         axios({
