@@ -2,12 +2,12 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import 'dotenv/config'
 import axios from "axios";
 import { RequestBody, WebhookQuery, NewsletterQuery } from './routes'
-import { notifyOwner, sendTextMessage, sendAudioMessage, sendDocument } from './fuctions/whatsapp'
-import { searchVideoOnYoutube, convertYTVideoToAudio } from './fuctions/youtube'
-import { removeCommand } from './fuctions/text'
+import { notifyOwner, sendTextMessage, sendAudioMessage, sendDocument, sendNewsletter } from './functions/whatsapp'
+import { searchVideoOnYoutube, convertYTVideoToAudio } from './functions/youtube'
+import { removeCommand } from './functions/functions'
 
 const myToken = process.env.TOKEN;
-
+const PORT = Number(process.env.PORT);
 
 const server = fastify({ logger: false })
 
@@ -26,7 +26,7 @@ server.get('/', async (request: FastifyRequest<{Querystring:WebhookQuery}>, repl
     }
   } else {
     reply.status(403).send("403")
-    return { message: msg || 'Hello, World!' }
+    return { message: 'Hello, World!' }
   }
 })
 
@@ -40,9 +40,9 @@ server.post("/", async (request: FastifyRequest<{ Body: RequestBody }>, reply: F
       body.entry[0].changes[0].value.messages &&
       body.entry[0].changes[0].value.messages[0]
     ) {
-      const phoneNumberId =
-        body.entry[0].changes[0].value.metadata.phone_number_id;
-      const from = body.entry[0].changes[0].value.messages[0].from;
+      const phoneNumberId: string =
+        body.entry[0].changes[0].value.metadata.phone_number_id.toString();
+      const from: string = body.entry[0].changes[0].value.messages[0].from.toString();
       const name = body.entry[0].changes[0].value.contacts[0].profile?.name;
       const messageBody = body.entry[0].changes[0].value.messages[0].text.body;
 
@@ -56,11 +56,6 @@ server.post("/", async (request: FastifyRequest<{ Body: RequestBody }>, reply: F
             const answer: string = data.answer
             sendTextMessage(answer, from, phoneNumberId)
           }).catch((error: any) => console.error(error))
-      }
-
-      console.log(`${name} said ${messageBody}`)
-      if (from != "258850143767") {
-        notifyOwner(messageBody, name, phoneNumberId)
       }
       // ESimas
       const messageLower = messageBody.toLowerCase()
@@ -120,16 +115,22 @@ server.post("/", async (request: FastifyRequest<{ Body: RequestBody }>, reply: F
       } 
       else if (messageLower.includes('#tell')) {
         const ref = removeCommand('#tell', messageLower)
-        const people = [
-          { name: 'shasha ', id: "258842787852"},
-          { name: 'me ',     id: "258850143767"}
-        ]
-        people.forEach( (person: string) => {
-          if (ref.includes(person.name)) {
-            const msg = ref.replace(person.name, '')
-            sendTextMessage(msg, person.id, phoneNumberId)
-          }
-        })
+        if (ref.startsWith('me')) {
+          const msg = ref.replace('me', '')
+          sendTextMessage(msg, from, phoneNumberId)
+        } else {
+          const people = [
+            { name: 'shasha ', id: "258842787852"},
+            { name: 'eusebio ', id: '258850143767'}
+          ]
+          people.forEach( (person: { name: string, id: string}) => {
+            if (ref.includes(person.name)) {
+              const msg = ref.replace(person.name, '')
+              sendTextMessage(msg, person.id, phoneNumberId)
+            }
+          })
+        }
+        
       }
       else {
         axios({
@@ -163,7 +164,7 @@ server.post("/newsletter", (request: FastifyRequest<{ Querystring: NewsletterQue
   }
 })
 
-server.listen({ port: process.env.PORT!, host: '0.0.0.0' }, (err: any, address?: string) => {
+server.listen({ port: PORT, host: '0.0.0.0' }, (err: any, address?: string) => {
 	if (err) {
 		server.log.error(err)
 		process.exit(1)

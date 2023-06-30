@@ -82,24 +82,6 @@ export const sendDocument = (link: string, filename: string, to: string, phoneNu
 }
 
 
-export const notifyOwner = (message: string, name: string, phoneNumberId: string) => {
-  axios({
-    method: "POST",
-    url: `https://graph.facebook.com/v15.0/${phoneNumberId}/messages?access_token=${TOKEN}`,
-    data: {
-      messaging_product: "whatsapp",
-      to: "258850143767",
-      text: {
-        body: `${name} - ${message}`,
-      },
-    },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((response: any) => console.log('>_ owner notified!'))
-    .catch((err: any) => console.error(err));
-}
-
 export const sendNewsletter = (message: string, from: string) => {
   axios({
     method: "POST",
