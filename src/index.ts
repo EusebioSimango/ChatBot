@@ -2,7 +2,7 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import 'dotenv/config'
 import axios from "axios";
 import { RequestBody, WebhookQuery, NewsletterQuery } from './routes'
-import { notifyOwner, sendTextMessage, sendAudioMessage, sendDocument, sendNewsletter } from './functions/whatsapp'
+import { sendTextMessage, sendAudioMessage, sendDocument, sendNewsletter } from './functions/whatsapp'
 import { searchVideoOnYoutube, convertYTVideoToAudio } from './functions/youtube'
 import { removeCommand } from './functions/functions'
 
@@ -120,8 +120,9 @@ server.post("/", async (request: FastifyRequest<{ Body: RequestBody }>, reply: F
           sendTextMessage(msg, from, phoneNumberId)
         } else {
           const people = [
-            { name: 'shasha ', id: "258842787852"},
-            { name: 'eusebio ', id: '258850143767'}
+            { name: 'shasha ',  id: '258842787852'},
+            { name: 'eusebio ', id: '258850143767'},
+            { name: 'lenice',   id: '258878130402'}
           ]
           people.forEach( (person: { name: string, id: string}) => {
             if (ref.includes(person.name)) {
